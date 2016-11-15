@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+
+  publb:
+    image: dockercloud/haproxy:1.5.3
+    ports:
+    - "443:443"
+    - "1936:1936"
+    links:
+    - api
+    - react-app
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+    - "STATS_AUTH=stats:stats"
+    - "STATS_PORT=1936"
+    restart: unless-stopped
+
+  api-data:
+    image: node:6
+    volumes:
+    - "/var/markdown-notes/data"
+    command: "/bin/true"
+
+  api:
+    build: ./api
+    volumes_from:
+    - "api-data"
+    command: "npm start"
+    expose:
+    - "3100"
+    environment:
+    - "VIRTUAL_HOST=https://api.markdown-notes.donmartin76.com:443"
+    - "VIRTUAL_HOST_WEIGHT=100"
+    - "SSL_CERT=${API_PEM}"
+    - "API_DATAPATH=/var/markdown-notes/data"
+    restart: unless-stopped
+
+  react-app:
+    build: ./react-app
+    expose:
+    - "80"
+    environment:
+    - "VIRTUAL_HOST=https://markdown-notes.donmartin76.com:443"
+    - "VIRTUAL_HOST_WEIGHT=0"
+    - "SSL_CERT=${REACT_APP_PEM}"
+    - "EXCLUDE_PORTS=443"
+    restart: unless-stopped
+

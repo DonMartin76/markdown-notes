@@ -1,0 +1,58 @@
+.App {
+  height: 100%;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+div.index {
+}
+
+div.editor {
+
+}
+
+div.myTextArea {
+  font-family: Courier;
+  height: 200px;
+}
+
+div.markdown {
+  height: 50%;
+}
+
+div.editorWindow  {
+  height: 500px;
+  border: 1px;
+}
+
+div.spacer {
+  margin-bottom: 8px;
+} 
+
+.widthSpacer {
+  width: 2%;
+  display: inline-block
+}
+
+.halfSize {
+  width: 49%;
+}
