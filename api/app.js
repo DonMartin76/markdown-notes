@@ -29,7 +29,7 @@ if (process.env.API_BASE_PATH) {
   console.log('Using base path "/".');
 }
 
-app.use(cors());
+//app.use(cors());
 app.use(apiAuth); // require basic auth
 app.use(userMapper); // Map authenticated-userid to internal user id, may create users
 app.use(basePath + 'users', users);

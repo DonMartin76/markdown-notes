@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# Prereqs:
+# - a docker-machine you can use, here called "markdown-notes"
+# - valid PEM cert and key for the domain you are using 
+
 eval $(docker-machine env markdown-notes)
 
 export | grep DOCKER
 
 export API_PEM=$(cat certs/api-key.pem certs/api-cert.pem | tr -d '\015' | awk 1 ORS='\\n')
-export REACT_APP_PEM=$(cat certs/react-app-key.pem certs/react-app-cert.pem | tr -d '\015' | awk 1 ORS='\\n')
 
 docker-compose pull
 docker-compose build

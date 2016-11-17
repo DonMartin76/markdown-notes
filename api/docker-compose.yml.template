@@ -31,20 +31,8 @@ services:
     expose:
     - "3100"
     environment:
-    - "VIRTUAL_HOST=https://api.markdown-notes.donmartin76.com:443"
+    - "VIRTUAL_HOST=https://api.markdown-notes.yourcompany.com:443"
     - "VIRTUAL_HOST_WEIGHT=100"
     - "SSL_CERT=${API_PEM}"
     - "API_DATAPATH=/var/markdown-notes/data"
     restart: unless-stopped
-
-  react-app:
-    build: ./react-app
-    expose:
-    - "80"
-    environment:
-    - "VIRTUAL_HOST=https://markdown-notes.donmartin76.com:443"
-    - "VIRTUAL_HOST_WEIGHT=0"
-    - "SSL_CERT=${REACT_APP_PEM}"
-    - "EXCLUDE_PORTS=443"
-    restart: unless-stopped
-
