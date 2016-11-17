@@ -39,7 +39,7 @@ export const createUserReducer = (loggedIn, accessToken) => {
       case "USER_COMPANY":
         return Object.assign({}, state, { company: action.company });
       case "USER_ACCEPT_TERMS":
-        return Object.assign({}, state, { acceptTerms: !!action.acceptTerms });
+        return Object.assign({}, state, { acceptTerms: action.acceptTerms });
       case "USER_REGISTERING":
         return Object.assign({}, state, { registering: true });
       case "USER_REGISTERED":

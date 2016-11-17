@@ -56,7 +56,9 @@ if (process.env.REACT_APP_AUTH_SERVER_GOOGLE) {
 }
 
 if (process.env.REACT_APP_AUTH_SERVER_SAML) {
-  const samlServerUrl = process.env.REACT_APP_AUTH_SERVER_SAML;
+  let samlServerUrl = process.env.REACT_APP_AUTH_SERVER_SAML;
+  if (!samlServerUrl.endsWith('/'))
+    samlServerUrl += '/';
   authServerData.push({
     name: "Atlantic SAML",
     url: samlServerUrl + API_NAME + '?client_id=' + CLIENT_ID,
