@@ -8,8 +8,9 @@ coverage
 
 # production
 build
-build_react_app.sh
-deploy_react_app.sh
+build-react-app.sh
+deploy-react-app.sh
+start-local.sh
 
 # misc
 .DS_Store
