@@ -19,28 +19,40 @@ import { createUserReducer } from './reducers/userReducer';
 import { createViewReducer } from './reducers/viewReducer';
 
 const authServerData = [];
+const errorMessages = [];
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+if (!CLIENT_ID)
+  errorMessages.push('Dude, this application needs to be built with a REACT_APP_CLIENT_ID');
+
 const API_NAME = 'api/markdown-notes';
 let AUTH_SERVER_SOCIAL = process.env.REACT_APP_AUTH_SERVER_SOCIAL;
-if (!AUTH_SERVER_SOCIAL.endsWith('/'))
+if (AUTH_SERVER_SOCIAL && !AUTH_SERVER_SOCIAL.endsWith('/'))
   AUTH_SERVER_SOCIAL += '/';
 
 if (process.env.REACT_APP_AUTH_SERVER_GITHUB) {
-  authServerData.push({
-    name: "GitHub",
-    url: AUTH_SERVER_SOCIAL + 'github/' + API_NAME + '?client_id=' + CLIENT_ID,
-    profileUrl: AUTH_SERVER_SOCIAL + 'profile',
-    bsStyle: "default"
-  });
+  if (!AUTH_SERVER_SOCIAL)
+    errorMessages.push('If you want Github login, you will need to specify REACT_APP_AUTH_SERVER_SOCIAL when building.');
+  else {
+    authServerData.push({
+      name: "GitHub",
+      url: AUTH_SERVER_SOCIAL + 'github/' + API_NAME + '?client_id=' + CLIENT_ID,
+      profileUrl: AUTH_SERVER_SOCIAL + 'profile',
+      bsStyle: "default"
+    });
+  }
 }
 if (process.env.REACT_APP_AUTH_SERVER_GOOGLE) {
-  authServerData.push({
-    name: "Google",
-    url: AUTH_SERVER_SOCIAL + 'google/' + API_NAME + '?client_id=' + CLIENT_ID,
-    profileUrl: AUTH_SERVER_SOCIAL + 'profile',
-    bsStyle: "danger"
-  });
+  if (!AUTH_SERVER_SOCIAL)
+    errorMessages.push('If you want Google login, you will need to specify REACT_APP_AUTH_SERVER_SOCIAL when building.');
+  else {
+    authServerData.push({
+      name: "Google",
+      url: AUTH_SERVER_SOCIAL + 'google/' + API_NAME + '?client_id=' + CLIENT_ID,
+      profileUrl: AUTH_SERVER_SOCIAL + 'profile',
+      bsStyle: "danger"
+    });
+  }
 }
 
 if (process.env.REACT_APP_AUTH_SERVER_SAML) {
@@ -83,10 +95,9 @@ const view = createViewReducer();
 const notesIndex = createNotesIndexReducer();
 const notes = createNotesReducer();
 const activeId = createActiveIdReducer();
-const authServers = (state = authServerData, action) => {
-  // Immutable, but good to have in state
-  return state;
-};
+// Immutable, but good to have in state
+const authServers = (state = authServerData, action) => { return state; };
+const errors = (state = errorMessages, action) => { return state };
 
 const notesApp = combineReducers({
   user,
@@ -94,7 +105,8 @@ const notesApp = combineReducers({
   notesIndex,
   notes,
   activeId,
-  authServers
+  authServers,
+  errors
 });
 
 let store = createStore(notesApp, applyMiddleware(ReduxThunk));

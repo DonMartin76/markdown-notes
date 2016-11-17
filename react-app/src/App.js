@@ -7,6 +7,7 @@ import { Navigation } from './Navigation';
 import { NotesIndex } from './NotesIndex';
 import { Editor } from './Editor';
 import { EditProfile } from './EditProfile';
+import { Errors } from './Errors';
 import { Register } from './Register';
 import { Login } from './Login';
 import './App.css';
@@ -15,6 +16,10 @@ const MainView = ({
   view
 }) => {
   switch (view) {
+    case "ERROR":
+      return (
+        <Errors />
+      );
     case "PROFILE":
       return (
         <EditProfile />
@@ -51,7 +56,9 @@ const MainView = ({
 
 const mapStateToMainProps = (state) => {
   let view = "EDITOR";
-  if (!state.user.loggedIn)
+  if (state.errors.length > 0)
+    view = "ERROR";
+  else if (!state.user.loggedIn)
     view = "LOGIN";
   else if (state.user.loggedIn && (state.user.meFetching || state.user.profileFetching))
     view = "LOADING";
