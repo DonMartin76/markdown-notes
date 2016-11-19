@@ -24,6 +24,7 @@ const errorMessages = [];
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 if (!CLIENT_ID)
   errorMessages.push('Dude, this application needs to be built with a REACT_APP_CLIENT_ID');
+const RESPONSE_TYPE = '&response_type=token';
 
 const API_NAME = 'api/markdown-notes';
 let AUTH_SERVER_SOCIAL = process.env.REACT_APP_AUTH_SERVER_SOCIAL;
@@ -36,7 +37,7 @@ if (process.env.REACT_APP_AUTH_SERVER_GITHUB) {
   else {
     authServerData.push({
       name: "GitHub",
-      url: AUTH_SERVER_SOCIAL + 'github/' + API_NAME + '?client_id=' + CLIENT_ID,
+      url: AUTH_SERVER_SOCIAL + 'github/' + API_NAME + '?client_id=' + CLIENT_ID + RESPONSE_TYPE,
       profileUrl: AUTH_SERVER_SOCIAL + 'profile',
       bsStyle: "default"
     });
@@ -48,7 +49,7 @@ if (process.env.REACT_APP_AUTH_SERVER_GOOGLE) {
   else {
     authServerData.push({
       name: "Google",
-      url: AUTH_SERVER_SOCIAL + 'google/' + API_NAME + '?client_id=' + CLIENT_ID,
+      url: AUTH_SERVER_SOCIAL + 'google/' + API_NAME + '?client_id=' + CLIENT_ID + RESPONSE_TYPE,
       profileUrl: AUTH_SERVER_SOCIAL + 'profile',
       bsStyle: "danger"
     });
@@ -61,7 +62,7 @@ if (process.env.REACT_APP_AUTH_SERVER_SAML) {
     samlServerUrl += '/';
   authServerData.push({
     name: "Atlantic SAML",
-    url: samlServerUrl + API_NAME + '?client_id=' + CLIENT_ID,
+    url: samlServerUrl + API_NAME + '?client_id=' + CLIENT_ID + RESPONSE_TYPE,
     profileUrl: samlServerUrl + 'profile',
     bsStyle: "primary"
   });
@@ -75,6 +76,16 @@ const getAccessToken = (hash) => {
   const parsedHash = QueryString.parse(hash);
   if (!parsedHash.access_token)
     return null;
+  if (parsedHash.state) {
+    const storedState = window.localStorage.getItem('clientState');
+    if (storedState !== parsedHash.state) {
+      console.error('Received state parameter does not match localStorage.');
+      return null;
+    }
+  } else {
+    console.error('Did not receive state parameter back from Auth server.');
+    return null;
+  }
   return parsedHash.access_token;
 };
 

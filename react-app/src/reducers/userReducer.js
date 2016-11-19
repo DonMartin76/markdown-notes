@@ -7,7 +7,9 @@ export const createUserReducer = (loggedIn, accessToken) => {
       case "REDIRECT_TO_AUTH_SERVER":
         // Jump off, remember where to get the profile from.
         window.localStorage.setItem("profileUrl", action.profileUrl);
-        window.location = action.url;
+        const clientState = Math.random().toString(36).substring(2);
+        window.localStorage.setItem("clientState", clientState);
+        window.location = action.url + '&state=' + clientState;
         return state;
       case "ME_FETCHING":
         return Object.assign({}, state, { meFetching: true });
