@@ -10,6 +10,7 @@ coverage
 build
 build-react-app.sh
 deploy-react-app.sh
+deploy-empty.sh
 start-local.sh
 
 # misc

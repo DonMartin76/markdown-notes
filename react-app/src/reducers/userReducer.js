@@ -21,9 +21,9 @@ export const createUserReducer = (loggedIn, accessToken) => {
         return Object.assign({}, state, { fetchingProfile: true });
       case "PROFILE_FETCHED": {
         const userData = {
-          name: action.profile.full_name,
+          name: action.profile.name,
           email: action.profile.email,
-          username: action.profile.username
+          username: action.profile.preferred_username
         };
         return Object.assign({}, state, userData, { fetchingProfile: false });
       }
