@@ -14,6 +14,7 @@ const userMapper = (req, res, next) => {
     const externalId = req.headers['x-authenticated-userid'];
     if (!externalId)
         return res.status(400).json({ message: 'Bad request, missing X-Authenticated-Userid header.' });
+    debug('X-Authenticated-Userid: ' + externalId);
     db.findOrCreateUser(externalId, function (err, userData) {
         if (err)
             return next(err);
