@@ -1,9 +1,13 @@
 #!/bin/bash
 
-export REACT_APP_CLIENT_ID=<the client ID for the API from the wicked portal>
+# These things aren't needed anymore, instead, the docker image
+# has to be fed with environment variables. This is not a template
+# anymore. TODO: Fix documentation.
 
-export REACT_APP_AUTH_SERVER_SOCIAL=https://api.yourcompany.com/auth-passport
-export REACT_APP_AUTH_SERVER_GITHUB=true
+# export REACT_APP_CLIENT_ID=<the client ID for the API from the wicked portal>
+
+# export REACT_APP_AUTH_SERVER_SOCIAL=https://api.yourcompany.com/auth-passport
+# export REACT_APP_AUTH_SERVER_GITHUB=true
 #export REACT_APP_AUTH_SERVER_GOOGLE=true
 
 #export REACT_APP_AUTH_SERVER_SAML=https://api.yourcompany.com/auth-saml
