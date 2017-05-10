@@ -10,63 +10,29 @@ import './index.css';
 
 // Initial Action we will dispatch if we either already have an access token,
 // or if we were called with a new access token in the fragment (hash)
-import { initializeFromApi } from './actions';
+import { initializeFromApi, loadSettings } from './actions';
 
 // Import the reducer factories
 import { createNotesReducer, createNotesIndexReducer } from './reducers/notesReducers';
 import { createActiveIdReducer } from './reducers/activeIdReducer';
 import { createUserReducer } from './reducers/userReducer';
 import { createViewReducer } from './reducers/viewReducer';
+import { createAuthServersReducer } from './reducers/authServersReducer';
 
-const authServerData = [];
+// const authServerData = [];
 const errorMessages = [];
 
-const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
-if (!CLIENT_ID)
-  errorMessages.push('Dude, this application needs to be built with a REACT_APP_CLIENT_ID');
-const RESPONSE_TYPE = '&response_type=token';
-
-const API_NAME = 'api/markdown-notes';
-let AUTH_SERVER_SOCIAL = process.env.REACT_APP_AUTH_SERVER_SOCIAL;
-if (AUTH_SERVER_SOCIAL && !AUTH_SERVER_SOCIAL.endsWith('/'))
-  AUTH_SERVER_SOCIAL += '/';
-
-if (process.env.REACT_APP_AUTH_SERVER_GITHUB) {
-  if (!AUTH_SERVER_SOCIAL)
-    errorMessages.push('If you want Github login, you will need to specify REACT_APP_AUTH_SERVER_SOCIAL when building.');
-  else {
-    authServerData.push({
-      name: "GitHub",
-      url: AUTH_SERVER_SOCIAL + 'github/' + API_NAME + '?client_id=' + CLIENT_ID + RESPONSE_TYPE,
-      profileUrl: AUTH_SERVER_SOCIAL + 'profile',
-      bsStyle: "default"
-    });
-  }
-}
-if (process.env.REACT_APP_AUTH_SERVER_GOOGLE) {
-  if (!AUTH_SERVER_SOCIAL)
-    errorMessages.push('If you want Google login, you will need to specify REACT_APP_AUTH_SERVER_SOCIAL when building.');
-  else {
-    authServerData.push({
-      name: "Google",
-      url: AUTH_SERVER_SOCIAL + 'google/' + API_NAME + '?client_id=' + CLIENT_ID + RESPONSE_TYPE,
-      profileUrl: AUTH_SERVER_SOCIAL + 'profile',
-      bsStyle: "danger"
-    });
-  }
-}
-
-if (process.env.REACT_APP_AUTH_SERVER_SAML) {
-  let samlServerUrl = process.env.REACT_APP_AUTH_SERVER_SAML;
-  if (!samlServerUrl.endsWith('/'))
-    samlServerUrl += '/';
-  authServerData.push({
-    name: "Atlantic SAML",
-    url: samlServerUrl + API_NAME + '?client_id=' + CLIENT_ID + RESPONSE_TYPE,
-    profileUrl: samlServerUrl + 'profile',
-    bsStyle: "primary"
-  });
-}
+// if (process.env.REACT_APP_AUTH_SERVER_SAML) {
+//   let samlServerUrl = process.env.REACT_APP_AUTH_SERVER_SAML;
+//   if (!samlServerUrl.endsWith('/'))
+//     samlServerUrl += '/';
+//   authServerData.push({
+//     name: "Atlantic SAML",
+//     url: samlServerUrl + API_NAME + '?client_id=' + CLIENT_ID + RESPONSE_TYPE,
+//     profileUrl: samlServerUrl + 'profile',
+//     bsStyle: "primary"
+//   });
+// }
 
 const getAccessToken = (hash) => {
   if (!hash)
@@ -108,8 +74,8 @@ const view = createViewReducer();
 const notesIndex = createNotesIndexReducer();
 const notes = createNotesReducer();
 const activeId = createActiveIdReducer();
+const authServers = createAuthServersReducer();
 // Immutable, but good to have in state
-const authServers = (state = authServerData, action) => { return state; };
 const errors = (state = errorMessages, action) => { return state };
 
 const notesApp = combineReducers({
@@ -125,6 +91,8 @@ const notesApp = combineReducers({
 let store = createStore(notesApp, applyMiddleware(ReduxThunk));
 window.store = store;
 
+// Load the Auth Server settings from settings.json
+store.dispatch(loadSettings());
 if (loggedIn) {
   // Try to make an initial state now that we think we're logged in.
   store.dispatch(initializeFromApi());

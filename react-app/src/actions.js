@@ -227,9 +227,23 @@ export const userSaveError = function (error) {
   };
 };
 
+export const settingsLoaded = function (settings) {
+  return {
+    type: "SETTINGS_LOADED",
+    settings
+  };
+};
+
 // ================================================
 // ASYNC ACTIONS - these need redux-thunk to work.
 // ================================================
+
+export const loadSettings = function () {
+  return (dispatch, getState) => {
+    api.loadSettings()
+      .then((settings) => dispatch(settingsLoaded(settings)));
+  };
+};
 
 export const saveNote = function (id) {
   return (dispatch, getState) => {

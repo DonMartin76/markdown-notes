@@ -17,3 +17,4 @@ start-local.sh
 .DS_Store
 .env
 npm-debug.log
+settings.json

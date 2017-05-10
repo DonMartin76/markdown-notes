@@ -54,6 +54,15 @@ api.get = (state, url) => {
         .then(parseJson);
 };
 
+api.loadSettings = () => {
+    console.log("LOADING SETTINGS");
+    return fetch('/settings.json', {
+        method: 'GET'
+    })
+        .then(checkStatus)
+        .then(parseJson);
+};
+
 api.put = (state, url, content) => {
     return fetch(BASE_URL + url, {
         method: 'PUT',

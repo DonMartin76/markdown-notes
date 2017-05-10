@@ -2,7 +2,7 @@
   "name": "markdown-notes",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://donmartin76.github.io/markdown-notes",
+  "homepage": "/",
   "devDependencies": {
     "react-scripts": "0.7.0"
   },
