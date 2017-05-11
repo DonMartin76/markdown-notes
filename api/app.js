@@ -30,7 +30,7 @@ if (process.env.API_BASE_PATH) {
 }
 
 //app.use(cors());
-app.use(apiAuth); // require basic auth
+//app.use(apiAuth); // require basic auth
 app.use(userMapper); // Map authenticated-userid to internal user id, may create users
 app.use(basePath + 'users', users);
 app.use(basePath + 'notes', notes);
