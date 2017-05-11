@@ -1,11 +1,12 @@
 import 'whatwg-fetch'; // fetch polyfill
 
-let BASE_URL = 'https://api.donmartin76.com/markdown-notes/v1/';
-if (process.env.REACT_APP_API_URL) {
-    BASE_URL = process.env.REACT_APP_API_URL;
-    if (!BASE_URL.endsWith('/'))
-        BASE_URL += '/';
-}
+let BASE_URL = null; //'https://api.donmartin76.com/markdown-notes/v1/';
+const API_PATH = '/markdown-notes/v1/';
+// if (process.env.REACT_APP_API_URL) {
+//     BASE_URL = process.env.REACT_APP_API_URL;
+//     if (!BASE_URL.endsWith('/'))
+//         BASE_URL += '/';
+// }
 
 //const TEST_HEADERS = {
 //    'X-Authenticated-UserId': 'google:1234567',
@@ -44,6 +45,12 @@ const parseJson = (response) => {
     return response.json();
 };
 
+const rememberApiUrl = (response) => {
+    BASE_URL = 'https://' + response.apiGateway + API_PATH;
+    console.log('Setting API Gateway: ' + BASE_URL);
+    return response;
+};
+
 // These all return Promises. I promise.
 api.get = (state, url) => {
     return fetch(BASE_URL + url, {
@@ -60,7 +67,8 @@ api.loadSettings = () => {
         method: 'GET'
     })
         .then(checkStatus)
-        .then(parseJson);
+        .then(parseJson)
+        .then(rememberApiUrl);
 };
 
 api.put = (state, url, content) => {

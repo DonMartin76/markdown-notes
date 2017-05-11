@@ -2,6 +2,7 @@
 
 # This has potential for optimizations...
 printf "{
+  \"apiGateway\": \"${API_GATEWAY}\",
   \"authServers\": [" > /var/www/settings.json
 if [ ! -z "$USE_GITHUB" ]; then
     printf "{
